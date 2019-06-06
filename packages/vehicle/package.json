@@ -6,5 +6,19 @@
   "repository": "git@github.com:carlbennettnz/vuw-mec-2019.git",
   "author": "Carl Bennett <carlbennettnz@gmail.com>",
   "license": "MIT",
-  "private": true
+  "private": true,
+  "scripts": {
+    "start": "nodemon src/index"
+  },
+  "dependencies": {
+    "express": "^4.17.1",
+    "fluent-ffmpeg": "^2.1.2",
+    "livecam": "^0.2.0",
+    "node-media-server": "^2.1.0",
+    "video-stream": "^1.2.1"
+  },
+  "devDependencies": {
+    "nodemon": "^1.19.1",
+    "prettier": "^1.17.1"
+  }
 }
