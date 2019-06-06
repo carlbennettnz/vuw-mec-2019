@@ -6,5 +6,8 @@
   "repository": "git@github.com:carlbennettnz/vuw-mec-2019.git",
   "author": "Carl Bennett <carlbennettnz@gmail.com>",
   "license": "MIT",
-  "private": true
+  "private": true,
+  "devDependencies": {
+    "prettier": "^1.17.1"
+  }
 }
