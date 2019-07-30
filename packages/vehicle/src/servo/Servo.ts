@@ -1,15 +1,11 @@
 import SerialPort from 'serialport'
-// @ts-ignore
-import InterByteTimeout from '@serialport/parser-inter-byte-timeout'
 import debugFactory from 'debug'
-import { Writable, Duplex, Transform } from 'stream'
 import { HerkulexPacketParser } from './HerkulexPacketParser'
 
-const debug = debugFactory('mec:servo')
 const debugTx = debugFactory('mec:servo:tx')
 const debugRx = debugFactory('mec:servo:rx')
 
-const wait = (ms: number) => new Promise(r => setTimeout(r, ms))
+export type LedColor = [boolean, boolean, boolean]
 
 export class Servo {
   private static RESPONSE_TIMEOUT = 500 // ms
@@ -22,16 +18,14 @@ export class Servo {
     .on('data', Servo.handleError)
 
   public static async init(id: number) {
-    const servo = new Servo(id)
-
-    servo.setTorqueControl(TorqueControlMode.TORQUE_ON)
-
-    return servo
+    return new Servo(id)
   }
 
   public static close() {
     Servo.tx.close()
   }
+
+  private color: LedColor = [false, true, false]
 
   private constructor(private pid: number) {}
 
@@ -66,7 +60,7 @@ export class Servo {
 
       const timer = setTimeout(() => {
         Servo.rx.off('data', listener)
-        reject(new Error('Timeout'))
+        reject(new Error(`Timeout when reading address ${addr} from servo ${this.pid}`))
       }, Servo.RESPONSE_TIMEOUT)
 
       Servo.rx.on('data', listener)
@@ -120,7 +114,10 @@ export class Servo {
       Buffer.from([
         (target >> 0) & 0xff,
         (target >> 8) & 0x3f,
-        0b00000000, // No LEDs on, position mode
+        0b00000000 | // position mode
+          (Number(this.color[0]) << 4) |
+          (Number(this.color[1]) << 2) |
+          (Number(this.color[2]) << 3),
         this.pid,
         Math.min(0xff, Math.min(0, duration * (60 / 672))) // Duration, coverted from milliseconds
       ])
@@ -132,9 +129,9 @@ export class Servo {
 
     // prettier-ignore
     const scale = (pos: number) =>
-      (modeBuffer[0] & 1) === 0
+      (modeBuffer[0] & 1) === 0 // if position mode
         ? pos * ((2 * 166.65) / 1024) - 166.65
-        : pos / 1024 * 360 - 180
+        : pos / 6.2 - 300
 
     return scale(posBuffer.readUInt16LE(0) & 0x03ff)
   }
@@ -147,7 +144,10 @@ export class Servo {
       Buffer.from([
         (Math.abs(target) >> 0) & 0xff,
         ((Math.abs(target) >> 8) & 0x3f) | (target < 0 ? 0x40 : 0),
-        0b00000010, // No LEDs on, continuous rotation
+        0b00000010 | // speed mode
+          (Number(this.color[0]) << 4) |
+          (Number(this.color[1]) << 2) |
+          (Number(this.color[2]) << 3),
         this.pid,
         0
       ])
@@ -155,6 +155,8 @@ export class Servo {
   }
 
   public async setLeds(r: boolean, g: boolean, b: boolean) {
+    this.color = [r, g, b]
+
     await this.write(
       Cmd.RAM_WRITE,
       Buffer.from([0x35, 0x01, (Number(r) << 2) ^ (Number(b) << 1) ^ Number(g)])

@@ -17,6 +17,7 @@ const retry = async (ms: number, action: () => Promise<void>): Promise<void> => 
     loop()
   })
 }
+
 /*
 I need to be able to test things in two ways: fast and slow.
 

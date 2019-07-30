@@ -16,6 +16,7 @@
     "debug": "^4.1.1",
     "express": "^4.17.1",
     "fluent-ffmpeg": "^2.1.2",
+    "kinematics": "^1.0.2",
     "livecam": "^0.2.0",
     "node-media-server": "^2.1.0",
     "pigpio": "^1.2.3",
@@ -25,6 +26,7 @@
   "devDependencies": {
     "@types/chai": "^4.1.7",
     "@types/debug": "^4.1.4",
+    "@types/express": "^4.17.0",
     "@types/mocha": "^5.2.7",
     "@types/serialport": "^7.0.4",
     "chai": "^4.2.0",

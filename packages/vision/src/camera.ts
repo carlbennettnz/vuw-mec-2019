@@ -13,7 +13,7 @@ export default (req: Request, res: Response) => {
 
   camera
     .snap()
-    .then(() => res.send(time))
+    .then(() => res.send(time.toString()))
     .catch((err: any) => {
       console.error(err)
       res.status(500).send((err && err.message) || err)

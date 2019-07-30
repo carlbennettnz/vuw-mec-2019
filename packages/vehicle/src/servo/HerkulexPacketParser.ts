@@ -7,7 +7,6 @@ export class HerkulexPacketParser extends Transform {
   private position: number = 0
 
   _transform(chunk: Buffer, encoding: string, cb: (err?: Error) => void) {
-    console.log(`Received ${chunk.length} bytes`)
     for (const byte of chunk) {
       if (this.position < 2) {
         this.readHeader(byte)

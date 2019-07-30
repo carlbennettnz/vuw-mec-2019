@@ -1,4 +1,5 @@
 import React from 'react'
+import CircleThing from './machines/CircleThing'
 
 export const Map = () => (
   <svg
@@ -34,5 +35,14 @@ export const Map = () => (
     </defs>
 
     <rect fill="url(#grid-pattern)" x="0" y="0" width="100%" height="100%" />
+
+    <rect x="100" y="100" width="100" height="100" className="stroke-current" fill="transparent" />
+    <rect x="200" y="100" width="100" height="100" className="stroke-current" fill="transparent" />
+    <rect x="300" y="100" width="100" height="100" className="stroke-current" fill="transparent" />
+    <rect x="400" y="100" width="100" height="100" className="stroke-current" fill="transparent" />
+    <rect x="500" y="100" width="100" height="100" className="stroke-current" fill="transparent" />
+
+    <CircleThing x={100} y={300} />
+    <CircleThing x={300} y={300} />
   </svg>
 )

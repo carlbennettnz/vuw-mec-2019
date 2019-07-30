@@ -7,6 +7,9 @@
   "author": "Carl Bennett <carlbennettnz@gmail.com>",
   "license": "MIT",
   "private": true,
+  "scripts": {
+    "start": "parcel src/index.html"
+  },
   "devDependencies": {
     "@types/react": "^16.8.22",
     "@types/react-dom": "^16.8.4",
