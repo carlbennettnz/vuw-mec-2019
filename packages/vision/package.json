@@ -18,7 +18,7 @@
     "typescript": "^3.5.3"
   },
   "dependencies": {
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "pi-camera": "^1.2.1",
     "raspi-pwm": "^6.0.0",
     "raspi": "^6.0.1"
